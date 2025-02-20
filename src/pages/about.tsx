@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 
 const aboutSections = [
+  // Initial sections
+  
   {
     title: "Our Mission",
     description: "Guardian Gate is dedicated to providing support and resources for women and children's safety and mental well-being.",
