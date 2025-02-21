@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import image1 from "@/images/1.jpeg";
 
 export function HeroSection() {
   return (
@@ -7,9 +8,11 @@ export function HeroSection() {
       <div 
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?auto=format&fit=crop&q=80')",
-          filter: "brightness(0.3)",
-          backgroundPosition: "center 30%", // Adjusted to move the image upwards
+          backgroundImage: `url(${image1})`,
+          backgroundSize: "cover", // Ensures the image covers the whole section
+          backgroundPosition: "center center", // Centers the image
+          backgroundRepeat: "no-repeat",
+          filter: "brightness(0.3)", // Adjusted to move the image upwards
         }}
       />
       
