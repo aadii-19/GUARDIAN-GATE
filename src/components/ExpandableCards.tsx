@@ -7,12 +7,13 @@ interface ExpandableCardProps {
   details: string;
 }
 
+
 export default function ExpandableCard({ title, description, details }: ExpandableCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <Card
-      className="p-6 shadow-lg rounded-lg bg-blue-50 hover:bg-blue-100 transform transition-all hover:scale-105 border-2 border-red-500 cursor-pointer"
+      className="p-6 shadow-lg rounded-lg bg-blue-50 hover:bg-blue-100 transform transition-all hover:scale-[1.025] hover:duration-200 border-2 border-red-500 cursor-pointer"
       onClick={() => setIsExpanded(!isExpanded)}
     >
       <h3 className="text-2xl font-medium">{title}</h3>
