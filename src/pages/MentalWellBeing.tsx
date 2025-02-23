@@ -5,12 +5,14 @@ import { motion } from "framer-motion";
 import ModalWindow from "@/components/ModalWindow";
 import BreathingExercise from "@/components/BreathingExercise";
 import MeditationTool from "@/components/MeditationTool";
+import YogaPoseGuide from "@/components/YogaPoseGuide";
 
 export default function MentalWellBeing() {
   const [activeSection, setActiveSection] = useState<'women' | 'children'>('women');
   const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenMeditation, setIsModalOpenMeditation] = useState(false);
+  const [isModalOpenYoga, setIsModalOpenYoga] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,6 +48,13 @@ export default function MentalWellBeing() {
           onClick={() => setActiveSection('children')}
         >
           Children's Mental Health
+        </Button>
+        {/* New button for Yoga Pose Guide */}
+        <Button
+          className="px-6 py-3 rounded-lg shadow-lg transition-transform hover:scale-105 focus:outline-none bg-red-500 text-white hover:bg-red-300"
+          onClick={() => setIsModalOpenYoga(true)}
+        >
+          Yoga Pose Guide
         </Button>
       </div>
 
@@ -163,6 +172,12 @@ export default function MentalWellBeing() {
           >
             Meditation Sessions
           </button>
+          <button
+            className="px-6 py-3 rounded-lg shadow-lg transition-transform hover:scale-105 focus:outline-none bg-red-500 text-white hover:bg-red-300"
+            onClick={() => setIsModalOpenYoga(true)}
+          >
+            Yoga Pose Guide
+          </button>
         </div>
 
         {isModalOpen && (
@@ -175,10 +190,12 @@ export default function MentalWellBeing() {
             <MeditationTool />
           </ModalWindow>
         )}
+        {isModalOpenYoga && (
+          <ModalWindow onClose={() => setIsModalOpenYoga(false)}>
+            <YogaPoseGuide />
+          </ModalWindow>
+        )}
       </motion.section>
-      
-      {/* How to Use Section */}
-      
     </div>
   );
 }

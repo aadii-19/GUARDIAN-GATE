@@ -13,13 +13,13 @@ export default function BreathingExercise() {
 
   const speak = (text: string) => {
     if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel(); // Stop any ongoing speech
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       window.speechSynthesis.speak(utterance);
     }
   };
-  
 
+  // Overall timer effect
   useEffect(() => {
     let timeInterval: NodeJS.Timeout;
     if (isPlaying) {
@@ -36,27 +36,21 @@ export default function BreathingExercise() {
       }, 1000);
     }
     return () => clearInterval(timeInterval);
-  }, [isPlaying, targetTime]); // ✅ Added targetTime
-  
+  }, [isPlaying, targetTime]);
 
+  // Toggle inhale/exhale every 4 seconds (each phase lasts 4 seconds)
   useEffect(() => {
-    let timeInterval: NodeJS.Timeout;
+    let breatheTimer: NodeJS.Timeout;
     if (isPlaying) {
-      timeInterval = setInterval(() => {
-        setElapsedTime((prev) => {
-          if (prev + 1 >= targetTime) {
-            setIsPlaying(false);
-            setHasReachedTarget(true);
-            speak("Session complete");
-            return targetTime;
-          }
-          return prev + 1;
-        });
-      }, 1000);
+      breatheTimer = setInterval(() => {
+        setIsBreathingIn((prev) => !prev);
+        hasSpokenRef.current = false;
+      }, 4000);
     }
-    return () => clearInterval(timeInterval);
+    return () => clearInterval(breatheTimer);
   }, [isPlaying]);
 
+  // Speak the instruction at the start of each phase if not already spoken
   useEffect(() => {
     if (isPlaying && !hasSpokenRef.current) {
       speak(isBreathingIn ? "Inhale" : "Exhale");
@@ -83,7 +77,12 @@ export default function BreathingExercise() {
         <div className="grid grid-cols-[60%_40%] gap-6 items-center w-full">
           <div className="flex flex-col items-center space-y-16">
             <motion.div
-              animate={isPlaying && !hasReachedTarget ? { scale: isBreathingIn ? 1.5 : 1 } : { scale: 1 }}
+              initial={{ scale: 1 }}
+              animate={
+                isPlaying && !hasReachedTarget
+                  ? { scale: isBreathingIn ? 1.5 : 1 }
+                  : { scale: 1 }
+              }
               transition={{ duration: 4, ease: "easeInOut" }}
               className="w-40 h-40 bg-red-500 rounded-full flex items-center justify-center text-white text-2xl shadow-xl border-4 border-white drop-shadow-lg"
             >
@@ -95,7 +94,7 @@ export default function BreathingExercise() {
                 className="px-6 py-3 rounded-lg shadow-lg bg-red-500 text-white hover:bg-red-300 transition-transform hover:scale-105 border-2 border-white drop-shadow-lg flex items-center"
                 onClick={() => {
                   if (!isPlaying) {
-                    speak("Inhale"); // 🔥 Speak only when Play is clicked the first time
+                    speak("Inhale");
                     hasSpokenRef.current = true;
                   }
                   setIsPlaying((prev) => !prev);
@@ -118,8 +117,12 @@ export default function BreathingExercise() {
 
           <div className="flex flex-col space-y-8 text-gray-800">
             <h3 className="text-xl font-semibold text-center">Session Stats</h3>
-            <p>Time Spent: <span className="font-bold">{elapsedTime} sec</span></p>
-            <p>Target Time: <span className="font-bold">{targetTime} sec</span></p>
+            <p>
+              Time Spent: <span className="font-bold">{elapsedTime} sec</span>
+            </p>
+            <p>
+              Target Time: <span className="font-bold">{targetTime} sec</span>
+            </p>
 
             <div className="w-full bg-gray-300 rounded-full h-4 overflow-hidden">
               <motion.div
@@ -170,4 +173,3 @@ export default function BreathingExercise() {
     </div>
   );
 }
-
