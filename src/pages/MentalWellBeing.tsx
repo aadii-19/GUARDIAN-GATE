@@ -49,13 +49,7 @@ export default function MentalWellBeing() {
         >
           Children's Mental Health
         </Button>
-        {/* New button for Yoga Pose Guide */}
-        <Button
-          className="px-6 py-3 rounded-lg shadow-lg transition-transform hover:scale-105 focus:outline-none bg-red-500 text-white hover:bg-red-300"
-          onClick={() => setIsModalOpenYoga(true)}
-        >
-          Yoga Pose Guide
-        </Button>
+        
       </div>
 
       {activeSection === 'women' && (
