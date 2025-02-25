@@ -14,7 +14,7 @@ export function ServicesOverview() {
             <p className="text-muted-foreground mb-4">
               Understand your legal rights and get expert guidance.
             </p>
-            <Link to="/services" className="text-primary hover:underline">
+            <Link to="/legal-help" className="text-primary hover:underline">
               Learn more →
             </Link>
           </Card>
@@ -47,7 +47,7 @@ export function ServicesOverview() {
             <p className="text-muted-foreground mb-4">
               Access resources for mental health and self-defense.
             </p>
-            <Link to="/services" className="text-primary hover:underline">
+            <Link to="/mental-wellbeing" className="text-primary hover:underline">
               Learn more →
             </Link>
           </Card>
