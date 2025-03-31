@@ -29,32 +29,49 @@ export default function LegalHelp() {
   };
 
   return (
-    <div className={`max-w-7xl mx-auto px-6 py-12 transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
-      <h1 className="text-5xl font-bold mb-12 text-center text-gray-800">Legal Help & Resources</h1>
+    <div className={`max-w-7xl mx-auto px-6 py-12 flex flex-col items-center transition-all duration-700 ease-in-out transform ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+  {/* Centered Heading with Border */}
+  <div className="inline-block border-0 px-6 py-2 rounded-md bg-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+  <h1 className="text-5xl font-bold text-gray-800 transition-colors duration-500 hover:text-red-600 text-center">
+    Legal Help & Resources
+  </h1>
+</div>
 
-      <p className="text-xl mb-12 text-center text-gray-600">
-        Women's and children's legal rights are essential for protection and empowerment. Below are resources and laws to guide and support you.
-      </p>
 
-      <div className="flex justify-center space-x-6 mb-12">
-        <Button
-          className={`px-6 py-3 rounded-lg shadow-lg transition-transform hover:scale-105 focus:outline-none ${
-            activeSection === "women" ? "bg-red-600" : "bg-red-500"
-          } text-white hover:bg-red-400`}
-          onClick={() => setActiveSection("women")}
-        >
-          Women's Rights & Resources
-        </Button>
-        <Button
-          className={`px-6 py-3 rounded-lg shadow-lg transition-transform hover:scale-105 focus:outline-none ${
-            activeSection === "children" ? "bg-red-600" : "bg-red-500"
-          } text-white hover:bg-red-400`}
-          onClick={() => setActiveSection("children")}
-        >
-          Children's Rights & Resources
-        </Button>
-      </div>
+  {/* Informational Content */}
+  <div className="mt-8 bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-5xl">
+    <p className="text-lg text-gray-700 text-center leading-relaxed">
+      Knowing your legal rights is the first step towards protection and empowerment.  
+      This section provides **essential legal resources** to help women and children understand  
+      the laws that safeguard them, where to seek help, and how to take action in critical situations.  
+    </p>
 
+    {/* Grid Content */}
+  </div>
+
+  {/* Buttons Section with Proper Bottom Padding */}
+  <div className="flex justify-center space-x-6 mt-8 pb-12">
+    <Button
+      className={`px-6 py-3 rounded-lg shadow-lg border-2 transition-all duration-300 ease-in-out transform hover:scale-110 hover:border-red-700 focus:outline-none ${
+        activeSection === "women" ? "bg-red-600 border-red-700" : "bg-red-500 border-red-600"
+      } text-white hover:bg-red-400`}
+      onClick={() => setActiveSection("women")}
+    >
+      Women's Rights & Resources
+    </Button>
+    <Button
+      className={`px-6 py-3 rounded-lg shadow-lg border-2 transition-all duration-300 ease-in-out transform hover:scale-110 hover:border-red-700 focus:outline-none ${
+        activeSection === "children" ? "bg-red-600 border-red-700" : "bg-red-500 border-red-600"
+      } text-white hover:bg-red-400`}
+      onClick={() => setActiveSection("children")}
+    >
+      Children's Rights & Resources
+    </Button>
+  </div>
+
+
+  
+  
       {/* Women's Rights Section */}
       {activeSection === "women" && (
         <motion.section
@@ -1335,6 +1352,7 @@ export default function LegalHelp() {
           {modalContent}
         </ModalWindow>
       )}
+     
     </div>
   );
 }
