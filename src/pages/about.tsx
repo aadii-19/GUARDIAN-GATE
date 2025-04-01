@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 const aboutSections = [
   // Initial sections
-  
   {
     title: "Our Mission",
     description: "Guardian Gate is dedicated to providing support and resources for women and children's safety and mental well-being.",
@@ -44,15 +43,20 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-semibold text-center text-gray-900 mb-12 fade-in">About Us</h1>
+    <div className="p-8 max-w-7xl mx-auto bg-white">
+      <div className="flex justify-center">
+  <div className="border-2 border-black rounded-2xl shadow-lg px-6 py-3 mb-9 flex items-center space-x-4">
+    
+    <h2 className="text-3xl font-bold text-center">Our Services</h2>
+  </div>
+</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {aboutSections.map((section, index) => (
           <div
             key={index}
-            className="space-y-6 p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out fade-in"
+            className="p-8 bg-white rounded-[12px] border-4 border-gray-200 shadow-xl hover:shadow-2xl hover:scale-105 hover:translate-y-2 transition-all duration-500 ease-in-out hover:rounded-[20px] flex flex-col items-center space-y-6 fade-in"
           >
-            <h2 className="text-2xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-300">
+            <h2 className="text-2xl font-semibold text-gray-900 hover:text-primary transition-colors duration-300">
               {section.title}
             </h2>
             <p className="text-lg text-gray-700">{section.description}</p>

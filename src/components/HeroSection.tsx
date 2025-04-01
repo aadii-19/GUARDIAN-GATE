@@ -20,7 +20,7 @@ export function HeroSection() {
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
           Your Safety is Our Priority
         </h1>
-        <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-200">
+        <p className="text-xl md:text-2xl mb-6 max-w-3xl mx-auto text-gray-200">
           Guardian Gate provides comprehensive support and resources for women and children's safety and mental well-being. You're not alone.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
