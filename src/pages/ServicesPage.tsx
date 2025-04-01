@@ -33,13 +33,13 @@ useEffect(() => {
             <GamepadIcon className="h-5 w-5" />
             Interactive Learning
           </TabsTrigger>
-          <TabsTrigger value="community" className="flex items-center gap-2 text-xl font-semibold">
-            <Users2 className="h-5 w-5" />
-            Community
-          </TabsTrigger>
           <TabsTrigger value="wellbeing" className="flex items-center gap-2 text-xl font-semibold">
             <Heart className="h-5 w-5" />
             Well-being
+          </TabsTrigger>
+          <TabsTrigger value="community" className="flex items-center gap-2 text-xl font-semibold">
+            <Users2 className="h-5 w-5" />
+            Community
           </TabsTrigger>
         </TabsList>
 
@@ -63,6 +63,7 @@ useEffect(() => {
           </Card>
         </TabsContent>
 
+
         <TabsContent value="community" className="space-y-8">
           <Card className="p-8">
             <h2 className="text-3xl font-semibold mb-6">Community Support</h2>
@@ -72,7 +73,6 @@ useEffect(() => {
             </Link>
           </Card>
         </TabsContent>
-
         <TabsContent value="wellbeing" className="space-y-8">
           <Card className="p-8">
             <h2 className="text-3xl font-semibold mb-6">Mental Well-being</h2>

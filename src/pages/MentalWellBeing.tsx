@@ -24,9 +24,14 @@ export default function MentalWellBeing() {
 
   return (
     <div className={`max-w-7xl mx-auto px-6 py-12 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-      <h1 className="text-5xl font-bold mb-12 text-center text-gray-800">
-        Mental Well-being & Support
-      </h1>
+      <div className="flex justify-center">
+  <div className="border-2 border-black rounded-2xl shadow-lg px-6 py-3 mb-9 flex items-center space-x-4">
+    
+    <h2 className="text-3xl font-bold text-center"> Mental Well-being & Support</h2>
+  </div>
+</div>
+       
+      
 
       <p className="text-xl mb-12 text-center text-gray-600">
         Prioritizing mental health is essential. Explore strategies, resources, and professional support for emotional well-being.
