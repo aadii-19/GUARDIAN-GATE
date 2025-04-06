@@ -1,236 +1,134 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRobot, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faRobot, faUser,faGavel, faPaperPlane, faComments, faRedo } from "@fortawesome/free-solid-svg-icons";
 
-const legalResponses: { [key: string]: { [key: string]: string[] } } = {
-  harassment: {
-    "workplace": [
-      "Workplace harassment is a serious issue. Here are the steps you can take:",
-      "- Report the harassment to your Human Resources (HR) department immediately.",
-      "- If HR does not take appropriate action, file a complaint with the Internal Complaints Committee (ICC) under the POSH Act.",
-      "- If the issue persists, consider contacting a legal expert or a lawyer specializing in workplace rights.",
-      "For more details, refer to the POSH Act, 2013."
-    ],
-    "sexual": [
-      "Sexual harassment at the workplace is illegal under the POSH Act. Here's what you can do:",
-      "- Report the incident to HR or the ICC.",
-      "- If you're not comfortable with HR, you can file a complaint with the Ministry of Women and Child Development.",
-      "- If you need immediate help, call the national helpline: 181.",
-      "It's essential to preserve any evidence of the harassment (emails, screenshots, etc.)."
-    ]
-  },
-  domesticViolence: {
-    "general": [
-      "Domestic violence is a serious offense. You can take the following steps:",
-      "- File a complaint under the Protection of Women from Domestic Violence Act, 2005.",
-      "- Contact the nearest Women's Helpline: 181 or National Helpline for Women: 1091.",
-      "- If you're in immediate danger, call the police at 100.",
-      "You may also be entitled to a Protection Order, Residence Order, or Monetary Relief under the law."
-    ],
-    "childAbuse": [
-      "If a child is being abused, immediate action is crucial. Here's what you can do:",
-      "- Call the Childline helpline: 1098.",
-      "- Report the abuse to the police or a child welfare committee.",
-      "- In some cases, the child may need medical or psychological help, so consider reaching out to a child protection organization."
-    ]
-  },
-  cyberbullying: {
-    "onlineHarassment": [
-      "If you're experiencing online harassment, here are some steps you can take:",
-      "- Report the harassment to the platform you're using (Facebook, Instagram, etc.). Most platforms have ways to report abusive behavior.",
-      "- File a complaint with the Cyber Crime Cell of your nearest police station.",
-      "- You can also contact the National Cyber Crime Reporting Portal: https://cybercrime.gov.in.",
-      "Cyberbullying is punishable under the IT Act, 2000."
-    ],
-    "identityTheft": [
-      "Identity theft is a serious issue. If you're facing it, do the following:",
-      "- Report the theft to the Cyber Crime Cell and file a First Information Report (FIR).",
-      "- Contact your bank and any financial institutions if your financial information has been compromised.",
-      "- Consider freezing your credit with the credit bureaus to prevent further misuse."
-    ]
-  },
-  propertyRights: {
-    "inheritance": [
-      "Under the Hindu Succession Act, 1956, women have equal rights to ancestral property. Here are your options:",
-      "- You are entitled to a share in the family property. If there’s a will, ensure it's legally valid and properly executed.",
-      "- If there’s a dispute, consult a property lawyer who can help you with legal proceedings.",
-      "Seek professional legal advice to understand your rights in more detail."
-    ],
-    "ownership": [
-      "If you're facing issues related to property ownership, here are some steps you can take:",
-      "- First, verify the title deed and ownership records of the property.",
-      "- If there’s a dispute, consult with a property lawyer to explore options for settling the issue legally.",
-      "- In some cases, you might need to approach the civil court to resolve property disputes."
-    ]
-  }
-};
-
-const randomResponses = [
-  "Please note that laws can vary based on your location. Always consult with a legal professional for precise guidance.",
-  "If you need help with a legal issue, don't hesitate to reach out to a legal expert or helpline.",
-  "Your legal rights are important! This chatbot provides basic information, but professional legal advice is recommended."
-];
-
-function getLegalAdvice(category: string, subcategory: string): string {
-  if (category && subcategory) {
-    return legalResponses[category]?.[subcategory]?.join("\n") || randomResponses[Math.floor(Math.random() * randomResponses.length)];
-  }
-  return randomResponses[Math.floor(Math.random() * randomResponses.length)];
-}
-
-export default function LegalAdviceChat() {
-  const [query, setQuery] = useState("");
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
+const LegalChatbot: React.FC = () => {
+  const [userInput, setUserInput] = useState("");
+  const [chatLog, setChatLog] = useState<{ type: string; message: string }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1); // 1: Initial question, 2: Topic selected, 3: Subtopic selected
-  const [category, setCategory] = useState<string | null>(null);
-  const [subcategory, setSubcategory] = useState<string | null>(null);
-
-  // Load chat history from localStorage
-  useEffect(() => {
-    const savedMessages = JSON.parse(localStorage.getItem("chatMessages") || "[]");
-    setMessages(savedMessages);
-  }, []);
-
-  // Save chat history to localStorage
-  useEffect(() => {
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
-  }, [messages]);
 
   const handleSend = async () => {
-    if (!query.trim()) return;
+    if (!userInput.trim()) return;
 
-    // Add user message to the chat
-    const userMessage = { sender: "user", text: query };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-
-    // Simulate bot response
+    const newChatLog = [...chatLog, { type: "user", message: userInput }];
+    setChatLog(newChatLog);
+    setUserInput("");
     setLoading(true);
-    let botResponse = "";
-    
-    if (step === 1) {
-      // Step 1: Present options
-      botResponse = "Please select a topic to ask about:\n1. Harassment\n2. Domestic Violence\n3. Cyberbullying\n4. Property Rights";
-      setStep(2); // Moving to topic selection step
-    } else if (step === 2) {
-      // Step 2: Handle topic selection
-      switch (query.toLowerCase()) {
-        case "1":
-          botResponse = "You selected Harassment. Do you want to know about:\n1. Workplace harassment\n2. Sexual harassment";
-          setCategory("harassment");
-          break;
-        case "2":
-          botResponse = "You selected Domestic Violence. Do you want to know about:\n1. General advice\n2. Child abuse";
-          setCategory("domesticViolence");
-          break;
-        case "3":
-          botResponse = "You selected Cyberbullying. Do you want to know about:\n1. Online harassment\n2. Identity theft";
-          setCategory("cyberbullying");
-          break;
-        case "4":
-          botResponse = "You selected Property Rights. Do you want to know about:\n1. Inheritance\n2. Ownership issues";
-          setCategory("propertyRights");
-          break;
-        default:
-          botResponse = "Please select a valid option (1, 2, 3, or 4).";
+
+    try {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer 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", 
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a helpful legal assistant specialized in Indian law. Be concise, clear, and provide correct legal guidance based on Indian law and rights.",
+            },
+            ...newChatLog.map((chat) => ({
+              role: chat.type === "user" ? "user" : "assistant",
+              content: chat.message,
+            })),
+          ],
+        }),
+      });
+
+      const data = await response.json();
+      const reply = data.choices?.[0]?.message?.content;
+
+      if (reply) {
+        setChatLog((prev) => [...prev, { type: "bot", message: reply }]);
+      } else {
+        setChatLog((prev) => [
+          ...prev,
+          { type: "bot", message: "Sorry, I couldn’t fetch a response." },
+        ]);
       }
-      setStep(3); // Moving to subtopic selection
-    } else if (step === 3) {
-      // Step 3: Handle subtopic selection and give advice
-      switch (query.toLowerCase()) {
-        case "1":
-          setSubcategory("general");
-          botResponse = getLegalAdvice(category!, "general");
-          break;
-        case "2":
-          if (category === "harassment") {
-            setSubcategory("workplace");
-            botResponse = getLegalAdvice("harassment", "workplace");
-          } else if (category === "domesticViolence") {
-            setSubcategory("childAbuse");
-            botResponse = getLegalAdvice("domesticViolence", "childAbuse");
-          } else if (category === "cyberbullying") {
-            setSubcategory("onlineHarassment");
-            botResponse = getLegalAdvice("cyberbullying", "onlineHarassment");
-          } else if (category === "propertyRights") {
-            setSubcategory("inheritance");
-            botResponse = getLegalAdvice("propertyRights", "inheritance");
-          }
-          break;
-        default:
-          botResponse = "Please select a valid subtopic (1 or 2).";
-      }
-      setStep(1); // Reset the chat to initial step after response
+    } catch (error) {
+      setChatLog((prev) => [
+        ...prev,
+        { type: "bot", message: "An error occurred while fetching the response." },
+      ]);
     }
 
-    // Add bot response to the chat
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { sender: "bot", text: botResponse },
-    ]);
+    setLoading(false);
+  };
 
-    setQuery(""); // Clear the input field
-    setLoading(false); // Stop loading spinner
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleSend();
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold text-red-500 text-center mb-4">Legal Advice Chat</h2>
+    <div className="min-h-screen bg-white p-6 text-black font-sans">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold mb-4 text-center">🧑‍⚖️ Legal Advice Chatbot</h1>
 
-      {/* Chat Box */}
-      <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-lg mb-4">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex items-start mb-3 ${msg.sender === "user" ? "text-right" : ""}`}
+        <div className="bg-blue-50 border-l-4 border-blue-400 p-5 rounded-lg shadow-md mb-6">
+  <h2 className="text-2xl font-semibold mb-3 text-blue-700">ℹ️ How to Use</h2>
+  <ul className="space-y-3 text-sm text-blue-900">
+    <li className="flex items-start gap-2">
+      <FontAwesomeIcon icon={faGavel} className="text-blue-500 pt-1" />
+      Type any legal question you have related to Indian law.
+    </li>
+    <li className="flex items-start gap-2">
+      <FontAwesomeIcon icon={faPaperPlane} className="text-blue-500 pt-1" />
+      Click <strong>Send</strong> or press <strong>Enter</strong>.
+    </li>
+    <li className="flex items-start gap-2">
+      <FontAwesomeIcon icon={faComments} className="text-blue-500 pt-1" />
+      The chatbot will respond with legal guidance instantly.
+    </li>
+    <li className="flex items-start gap-2">
+      <FontAwesomeIcon icon={faRedo} className="text-blue-500 pt-1" />
+      Ask follow-up questions naturally!
+    </li>
+  </ul>
+</div>
+        <div className="bg-white border border-gray-300 rounded-lg p-4 mb-4 h-[400px] overflow-y-auto shadow-inner">
+          {chatLog.map((chat, index) => (
+            <div key={index} className={`mb-3 flex ${chat.type === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                className={`max-w-[75%] px-4 py-2 rounded-lg ${
+                  chat.type === "user" ? "bg-blue-100 text-right" : "bg-green-100 text-left"
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <FontAwesomeIcon icon={chat.type === "user" ? faUser : faRobot} />
+                  <span className="text-sm whitespace-pre-line">{chat.message}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+          {loading && (
+            <div className="text-center text-sm text-gray-500">Fetching legal wisdom...</div>
+          )}
+        </div>
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="flex-grow border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring"
+            placeholder="Type your legal question here..."
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
+            onClick={handleSend}
+            disabled={loading}
           >
-            {msg.sender === "bot" ? (
-              <FontAwesomeIcon icon={faRobot} className="text-blue-500 mr-2" />
-            ) : (
-              <FontAwesomeIcon icon={faUser} className="text-green-500 mr-2" />
-            )}
-            <div
-              className={`px-4 py-2 rounded-lg ${
-                msg.sender === "user"
-                  ? "bg-blue-100 text-blue-800"
-                  : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              {msg.text}
-            </div>
-          </div>
-        ))}
-        {loading && (
-          <div className="flex items-center mb-3">
-            <FontAwesomeIcon
-              icon={faRobot}
-              className="text-blue-500 mr-2 animate-spin"
-            />
-            <div className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800">
-              ...Typing
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Input Box */}
-      <div className="flex">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          className="w-full p-2 rounded-lg border border-gray-300"
-          placeholder="Type your message..."
-        />
-        <button
-          onClick={handleSend}
-          className="ml-2 p-2 bg-red-500 text-white rounded-lg"
-        >
-          Send
-        </button>
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
-}
+};
 
+export default LegalChatbot;
