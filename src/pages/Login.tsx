@@ -18,9 +18,11 @@ const Login = () => {
     try {
       await signInWithPopup(auth, provider);
       navigate("/home");
-    } catch (err) {
-      alert("Google Sign-in failed ❌");
-    }
+    } catch (err: any) {
+        console.error("Google Sign-in failed ❌", err.message, err.code);
+        alert("Google Sign-in failed ❌: " + err.message);
+      }
+      
   };
 
   const handleEmailLogin = async () => {
