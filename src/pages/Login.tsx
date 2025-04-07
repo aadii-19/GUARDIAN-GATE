@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "@/features/firebase";
 import { Button } from "@/components/ui/button";
@@ -11,24 +11,22 @@ import { Button } from "@/components/ui/button";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Use navigate hook
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      navigate("/home");
-    } catch (err: any) {
-        console.error("Google Sign-in failed ❌", err.message, err.code);
-        alert("Google Sign-in failed ❌: " + err.message);
-      }
-      
+      navigate("/"); // Redirect to homepage after successful login
+    } catch (err) {
+      alert("Google Sign-in failed ❌");
+    }
   };
 
   const handleEmailLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/home");
+      navigate("/"); // Redirect to homepage after successful login
     } catch (err) {
       alert("Email Sign-in failed ❌");
     }
