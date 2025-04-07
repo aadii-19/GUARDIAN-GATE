@@ -53,7 +53,7 @@ const LegalChatbot: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer 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",
+          Authorization: "Bearer ",
         },
         body: JSON.stringify({
           model: "openai/gpt-3.5-turbo",
