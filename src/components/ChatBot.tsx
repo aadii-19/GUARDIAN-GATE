@@ -20,7 +20,7 @@ const LegalChatbot: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer ", 
+          Authorization: "Bearer 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", 
         },
         body: JSON.stringify({
           model: "openai/gpt-3.5-turbo",
@@ -64,70 +64,89 @@ const LegalChatbot: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6 text-black font-sans">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4 text-center">🧑‍⚖️ Legal Advice Chatbot</h1>
+    <div className="flex min-h-screen font-sans text-black">
+  {/* 📘 Left Instructions Panel */}
+  <div className="w-1/4 bg-blue-50 border-r-4 border-blue-400 flex items-center justify-center p-8">
+    <div className="max-w-xs">
+      <h2 className="text-3xl font-bold mb-6 text-blue-700 text-center">ℹ️ How to Use</h2>
+      <ul className="space-y-5 text-lg text-blue-900">
+        <li className="flex items-start gap-3">
+          <FontAwesomeIcon icon={faGavel} className="text-blue-500 pt-1" />
+          Type any legal question you have related to Indian law.
+        </li>
+        <li className="flex items-start gap-3">
+          <FontAwesomeIcon icon={faPaperPlane} className="text-blue-500 pt-1" />
+          Click <strong>Send</strong> or press <strong>Enter</strong>.
+        </li>
+        <li className="flex items-start gap-3">
+          <FontAwesomeIcon icon={faComments} className="text-blue-500 pt-1" />
+          The chatbot will respond with legal guidance instantly.
+        </li>
+        <li className="flex items-start gap-3">
+          <FontAwesomeIcon icon={faRedo} className="text-blue-500 pt-1" />
+          Ask follow-up questions naturally!
+        </li>
+      </ul>
 
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-5 rounded-lg shadow-md mb-6">
-  <h2 className="text-2xl font-semibold mb-3 text-blue-700">ℹ️ How to Use</h2>
-  <ul className="space-y-3 text-sm text-blue-900">
-    <li className="flex items-start gap-2">
-      <FontAwesomeIcon icon={faGavel} className="text-blue-500 pt-1" />
-      Type any legal question you have related to Indian law.
-    </li>
-    <li className="flex items-start gap-2">
-      <FontAwesomeIcon icon={faPaperPlane} className="text-blue-500 pt-1" />
-      Click <strong>Send</strong> or press <strong>Enter</strong>.
-    </li>
-    <li className="flex items-start gap-2">
-      <FontAwesomeIcon icon={faComments} className="text-blue-500 pt-1" />
-      The chatbot will respond with legal guidance instantly.
-    </li>
-    <li className="flex items-start gap-2">
-      <FontAwesomeIcon icon={faRedo} className="text-blue-500 pt-1" />
-      Ask follow-up questions naturally!
-    </li>
-  </ul>
-</div>
-        <div className="bg-white border border-gray-300 rounded-lg p-4 mb-4 h-[400px] overflow-y-auto shadow-inner">
-          {chatLog.map((chat, index) => (
-            <div key={index} className={`mb-3 flex ${chat.type === "user" ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[75%] px-4 py-2 rounded-lg ${
-                  chat.type === "user" ? "bg-blue-100 text-right" : "bg-green-100 text-left"
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <FontAwesomeIcon icon={chat.type === "user" ? faUser : faRobot} />
-                  <span className="text-sm whitespace-pre-line">{chat.message}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-          {loading && (
-            <div className="text-center text-sm text-gray-500">Fetching legal wisdom...</div>
-          )}
-        </div>
-
-        <div className="flex gap-2">
-          <input
-            type="text"
-            className="flex-grow border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring"
-            placeholder="Type your legal question here..."
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
-            onClick={handleSend}
-            disabled={loading}
-          >
-            Send
-          </button>
-        </div>
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold text-blue-600 mb-3">📋 Example Questions:</h3>
+        <ul className="list-disc list-inside text-blue-900 space-y-2 text-base">
+          <li>What is the process for filing an FIR?</li>
+          <li>Can I get bail for a non-bailable offense?</li>
+          <li>What are my rights during police interrogation?</li>
+          <li>How do I register a property in Delhi?</li>
+          <li>What is the legal age for marriage in India?</li>
+        </ul>
       </div>
     </div>
+  </div>
+
+  {/* 🤖 Right Chat Area */}
+  <div className="w-3/4 flex flex-col justify-between p-8 bg-white">
+    <h1 className="text-4xl font-bold mb-4 text-center">🧑‍⚖️ Legal Advice Chatbot</h1>
+
+    <div className="flex-grow overflow-y-auto border border-gray-300 rounded-lg p-6 mb-4 shadow-inner bg-gray-50 max-h-[70vh]">
+      {chatLog.map((chat, index) => (
+        <div key={index} className={`mb-5 flex ${chat.type === "user" ? "justify-end" : "justify-start"}`}>
+          <div
+            className={`max-w-[75%] px-5 py-3 rounded-xl text-lg ${
+              chat.type === "user" ? "bg-blue-100 text-right" : "bg-green-100 text-left"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <FontAwesomeIcon icon={chat.type === "user" ? faUser : faRobot} />
+              <span className="whitespace-pre-line">{chat.message}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+      {loading && (
+        <div className="text-center text-lg text-gray-500">Fetching legal wisdom...</div>
+      )}
+    </div>
+
+    <div className="flex gap-3">
+      <input
+        type="text"
+        className="flex-grow border border-gray-300 rounded px-5 py-3 text-lg focus:outline-none focus:ring"
+        placeholder="Type your legal question here..."
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
+        onKeyDown={handleKeyDown}
+        autoFocus
+      />
+      <button
+        className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded shadow text-lg"
+        onClick={handleSend}
+        disabled={loading}
+      >
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+
+  
   );
 };
 
