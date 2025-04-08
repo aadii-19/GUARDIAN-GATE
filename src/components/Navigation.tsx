@@ -1,21 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { Shield } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth } from "@/features/firebase";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import { useAuth } from "@/context/AuthContext";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 
 export function Navigation() {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
+  const location = useLocation();
+  
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/signup";
 
-    return () => unsubscribe();
-  }, []);
 
   const handleLogout = async () => {
     try {
@@ -29,7 +37,7 @@ export function Navigation() {
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
       <div className="w-full h-16 flex items-center justify-between px-5">
-        {/* Left-aligned Guardian Gate */}
+        {/* 🔰 Guardian Gate Logo */}
         <Link
           to="/"
           className="flex items-center space-x-2 border border-black rounded-lg px-4 py-2 transition-all duration-200 hover:bg-white-400 hover:border-black-400"
@@ -38,64 +46,66 @@ export function Navigation() {
           <span className="text-xl font-bold">Guardian Gate</span>
         </Link>
 
-        {/* Right-aligned Navigation Links */}
+        {/* 📌 Navigation Links */}
         <div className="flex items-center space-x-6 mr-4">
-          <Link
-            to="/"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            to="/services"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Services
-          </Link>
-          <Link
-            to="/resources"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Resources
-          </Link>
-          <Link
-            to="/about"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            About
-          </Link>
+          {/* Conditionally Render These */}
+          {!isAuthPage && (
+            <>
+              <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                Home
+              </Link>
+              <Link to="/services" className="text-muted-foreground hover:text-foreground transition-colors">
+                Services
+              </Link>
+              <Link to="/resources" className="text-muted-foreground hover:text-foreground transition-colors">
+                Resources
+              </Link>
+              <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+                About
+              </Link>
+            </>
+          )}
+
+          {/* Always Show These */}
           <Button variant="destructive" onClick={() => navigate("/emergency")}>
             Get Help Now
           </Button>
+          {user?.displayName && (
+  <span className="text-sm font-semibold text-red-600 ml-4">
+    {user.displayName}
+  </span>
+)}
 
-          {/* 🔐 Auth Buttons */}
+
           {user ? (
-            <>
-              <span className="text-sm text-muted-foreground">
-                {user.displayName || user.email}
-              </span>
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="text-sm"
-              >
-                Logout
-              </Button>
-            </>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" className="text-sm">
+                  Logout
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                  <AlertDialogDescription className="text-gray-800 text-base">
+                    Are you sure you want to logout from <strong>Guardian Gate</strong>? You’ll need to login again
+                    to access your account.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <Button variant="destructive" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           ) : (
             <>
-              <Button
-                variant="outline"
-                onClick={() => navigate("/login")}
-                className="text-sm"
-              >
+              <Button variant="outline" onClick={() => navigate("/login")} className="text-sm">
                 Login
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => navigate("/signup")}
-                className="text-sm"
-              >
+              <Button variant="outline" onClick={() => navigate("/signup")} className="text-sm">
                 Sign Up
               </Button>
             </>
