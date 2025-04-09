@@ -1,17 +1,19 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  authDomain: "guardian-gate-fd812.firebaseapp.com",
+  projectId: "guardian-gate-fd812",
+  storageBucket: "guardian-gate-fd812.appspot.com",
+  messagingSenderId: "52177565301",
+  appId: "1:52177565301:web:a2433f75317f5d3ea42a3c",
+  measurementId: "G-2J5Y5XPKTP"
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const analytics = getAnalytics(app);
 
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
+export { app, auth, analytics };
