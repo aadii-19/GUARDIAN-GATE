@@ -17,6 +17,8 @@ import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { Toaster } from "sonner"; // ✅ Import this!
+
 
 function App() {
   const location = useLocation();
@@ -25,6 +27,7 @@ function App() {
   return (
     <AuthProvider>
       <div className="min-h-screen bg-background">
+      <Toaster richColors position="top-center" /> {/* ✅ Add this line */}
         <Navigation />
 
         <Routes>

@@ -1,8 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Phone, MessageSquare, Shield } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { sendEmergencyAlert } from "@/features/emergency"; // we’ll create this next
+import { toast } from "sonner"; // if you're using sonner for notifications
 
 export function EmergencyPage() {
+  const { user } = useAuth(); // 👈 get current user
+
+  // ✅ Add the alert trigger function here
+  const handleSendAlert = async () => {
+    console.log("🚨 Send alert triggered"); // <- ADD THIS FIRST
+    try {
+      await sendEmergencyAlert(user?.uid || null);
+      toast.success("🚨 Emergency alert sent!");
+    } catch (err) {
+      toast.error("❌ Failed to send emergency alert");
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       <div className="text-center mb-12">
@@ -19,7 +35,12 @@ export function EmergencyPage() {
           <p className="text-muted-foreground mb-6">
             Call our emergency helpline for immediate assistance
           </p>
-          <Button size="lg" variant="destructive" className="w-full">
+          <Button
+            size="lg"
+            variant="destructive"
+            className="w-full"
+            onClick={handleSendAlert}
+          >
             Call 1-800-SAFE-NOW
           </Button>
         </Card>

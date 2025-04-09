@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Shield } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { auth } from "@/features/firebase";
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useAuth } from "@/context/AuthContext";
+import { auth } from "@/features/firebase";
+import { sendEmergencyAlert } from "@/features/emergency"; // 🔥 Add this
+import { toast } from "sonner"; // ✅ For feedback
+import { useState } from "react";
+
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -20,10 +23,27 @@ export function Navigation() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const [open, setOpen] = useState(false);
+
 
   const isAuthPage = location.pathname === "/login" || location.pathname === "/signup";
 
+  // 🆘 Trigger alert to Firebase
+  const handleSendAlert = async () => {
+    console.log("🚨 Send alert triggered");
+    if (user?.uid) {
+      await sendEmergencyAlert(user.uid);
+    } else {
+      await sendEmergencyAlert(null);
+    }
+  
+    toast.error("🚨 Emergency Alert Sent! Authorities have been notified.", {
+      style: { backgroundColor: "red", color: "white" },
+    });
+  
+    setOpen(false); // 👈 this will close the dialog after alert is sent
+  };
+  
 
   const handleLogout = async () => {
     try {
@@ -48,7 +68,6 @@ export function Navigation() {
 
         {/* 📌 Navigation Links */}
         <div className="flex items-center space-x-6 mr-4">
-          {/* Conditionally Render These */}
           {!isAuthPage && (
             <>
               <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -66,17 +85,39 @@ export function Navigation() {
             </>
           )}
 
-          {/* Always Show These */}
-          <Button variant="destructive" onClick={() => navigate("/emergency")}>
-            Get Help Now
-          </Button>
+          {/* 🆘 Emergency Button */}
+          <AlertDialog open={open} onOpenChange={setOpen}>
+          <AlertDialogTrigger asChild>
+  <Button variant="destructive" onClick={() => setOpen(true)}>
+    Get Help Now
+  </Button>
+</AlertDialogTrigger>
+
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Emergency Help Confirmation</AlertDialogTitle>
+      <AlertDialogDescription className="text-gray-800 text-base">
+        Are you sure you want to trigger an <strong>Emergency Alert</strong>? This action will notify emergency contacts and store the alert.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <Button variant="destructive" onClick={handleSendAlert}>
+        Yes, Send Alert 🚨
+      </Button>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+
+          {/* 👤 Display name */}
           {user?.displayName && (
-  <span className="text-sm font-semibold text-red-600 ml-4">
-    {user.displayName}
-  </span>
-)}
+            <span className="text-sm font-semibold text-red-600 ml-4">
+              {user.displayName}
+            </span>
+          )}
 
-
+          {/* 🔓 Auth Buttons */}
           {user ? (
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -88,8 +129,7 @@ export function Navigation() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
                   <AlertDialogDescription className="text-gray-800 text-base">
-                    Are you sure you want to logout from <strong>Guardian Gate</strong>? You’ll need to login again
-                    to access your account.
+                    Are you sure you want to logout from <strong>Guardian Gate</strong>? You’ll need to login again to access your account.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
