@@ -1,6 +1,6 @@
 import { getDatabase, ref, push, set } from "firebase/database";
 import { app } from "@/features/firebase"; 
-import { getCurrentTimestamp } from "@/lib/utils"; // optional: helper to get timestamp
+// import { getCurrentTimestamp } from "@/lib/utils"; // optional: helper to get timestamp
 
 export async function sendEmergencyAlert(userId: string | null) {
   const db = getDatabase(app);
