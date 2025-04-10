@@ -1,9 +1,38 @@
-import { Button } from "@/components/ui/button";
-import { Shield } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button"
+import { Shield } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { supabase } from "@/supabaseClient"
 
 export function Navigation() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [session, setSession] = useState<any>(null)
+
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession()
+      setSession(data.session)
+    }
+
+    getSession()
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => {
+      listener.subscription.unsubscribe()
+    }
+  }, [])
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) alert("Error signing out: " + error.message)
+    else {
+      setSession(null)
+      navigate("/login")
+    }
+  }
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
@@ -46,8 +75,15 @@ export function Navigation() {
           <Button variant="destructive" onClick={() => navigate("/emergency")}>
             Get Help Now
           </Button>
+
+          {/* Sign Out Button (only if logged in) */}
+          {session && (
+            <Button variant="outline" onClick={handleSignOut}>
+              Sign Out
+            </Button>
+          )}
         </div>
       </div>
     </nav>
-  );
+  )
 }
