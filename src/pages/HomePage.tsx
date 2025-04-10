@@ -47,7 +47,8 @@ export function HomePage() {
               <source src={hp} type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-black/20 to-transparent pointer-events-none rounded-[14px]" />
-
+            
+            {/* Video Play Text */}
             {!isPlaying && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="bg-black/50 text-white px-6 py-2 rounded-full font-semibold shadow-lg">
