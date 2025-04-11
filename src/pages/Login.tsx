@@ -4,7 +4,7 @@ import { supabase } from '@/supabaseClient';
 import ModalWindow from '@/components/ModalWindow';
 import DiscreetCamera from '@/components/DiscreetCamera';
 import FakeUIScreen from '@/components/FakeUIScreen';  // Adjust the path as needed
-
+import homebg from "@/images/homebg.jpg";
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -120,7 +120,15 @@ export default function LoginPage() {
 
   return (
     
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+    <div 
+    className="relative min-h-screen flex items-center justify-center overflow-hidden"
+  style={{
+    backgroundImage: `url(${homebg})`, // Set the background image
+    backgroundSize: "cover", // Ensure the image covers the entire div
+    backgroundPosition: "center", // Center the background image
+    backgroundAttachment: "fixed", // Optional: for parallax effect
+    backgroundRepeat: "no-repeat", // Prevent the image from repeating
+    }}>
       {showFakeUI && <FakeUIScreen onClose={() => setShowFakeUI(false)} />}
     <button
     onClick={() => setShowFakeUI(true)}
@@ -290,42 +298,7 @@ export default function LoginPage() {
 
 
 
-      <style>
-        {`
-          @keyframes bgMove {
-            0% { background-position: 0% 0%; }
-            25% { background-position: 50% 100%; }
-            50% { background-position: 100% 50%; }
-            75% { background-position: 50% 0%; }
-            100% { background-position: 0% 0%; }
-          }
-
-          .animate-bgMove {
-            background-size: 300% 300%;
-            animation: bgMove 16s ease-in-out infinite;
-          }
-
-          @keyframes blob {
-            0%, 100% {
-              transform: translate(0px, 0px) scale(1);
-            }
-            33% {
-              transform: translate(30px, -50px) scale(1.1);
-            }
-            66% {
-              transform: translate(-20px, 20px) scale(0.9);
-            }
-          }
-
-          .animate-blob {
-            animation: blob 10s infinite;
-          }
-
-          .animation-delay-2000 {
-            animation-delay: 2s;
-          }
-        `}
-      </style>
+      
     </div>
   );
 }
