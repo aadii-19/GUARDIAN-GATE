@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Book, Phone, Shield } from "lucide-react";
-import homebg from "@/images/homebg.jpg";
+import homebg from "@/images/homebg3.jpg";
 
 export function Resources() {
   return (

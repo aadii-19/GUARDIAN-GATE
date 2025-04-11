@@ -148,7 +148,7 @@ export default function LoginPage() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[300px] h-[300px] bg-rose-400 opacity-30 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000" />
 
       {!showEmergency && (
-        <div className="relative z-10 w-full max-w-md p-8 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl transition-all duration-300 hover:shadow-[0_10px_10px_rgba(255,0,0,0.6)]">
+        <div className="relative z-10 w-full max-w-md p-8 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,0,0,0.6)]">
           <h2 className="text-3xl font-extrabold text-center text-white mb-6 tracking-tight drop-shadow-lg">
             {isLogin ? 'Login to Guardian Gate' : 'Create Your Account'}
           </h2>

@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Scale, GamepadIcon, Users2, Heart, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
-import homebg from "@/images/homebg.jpg";
+import homebg from "@/images/homebg3.jpg";
 
 export function ServicesOverview() {
   return (
