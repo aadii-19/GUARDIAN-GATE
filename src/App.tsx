@@ -14,7 +14,10 @@ import SS from "@/components/SafetySimulator";
 import MTF from "@/components/MatchTheFollowing";
 import CB from "@/components/ChatBot";
 import LoginPage from "@/pages/Login";
+import PostStory from "@/pages/PostStory";
+import ViewStories from "@/pages/ViewStories";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import Community from "@/pages/Community";
 
 function App() {
   return (
@@ -40,6 +43,11 @@ function App() {
               <Route path="/game-2" element={<SS />} />
               <Route path="/game-3" element={<CB />} />
               <Route path="/game-4" element={<MTF />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/post-story" element={<PostStory />} />
+              <Route path="/view-stories" element={<ViewStories />} />
+              <Route path="/chatbot" element={<CB />} />
+
             </Routes>
             <Footer />
           </div>
