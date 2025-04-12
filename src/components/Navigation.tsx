@@ -94,10 +94,20 @@ export function Navigation() {
           </Button>
 
           {session && userName && (
-  <div className="px-3 py-1 text-sm font-medium text-gray-800 bg-white/70 backdrop-blur-md border border-gray-300 rounded-xl shadow hover:shadow-xl transition-all duration-300">
-    {userName}
-  </div>
+  <>
+    <div className="px-3 py-1 text-sm font-medium text-gray-800 bg-white/70 backdrop-blur-md border border-gray-300 rounded-xl shadow hover:shadow-xl transition-all duration-300">
+      {userName}
+    </div>
+
+    <Button
+      onClick={() => navigate("/user-profile")}
+      className="rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-sm px-3 py-1 bg-white/80 hover:bg-white text-gray-800 border border-gray-300"
+    >
+      Profile
+    </Button>
+  </>
 )}
+
 
 
           {session && (

@@ -18,7 +18,7 @@ import PostStory from "@/pages/PostStory";
 import ViewStories from "@/pages/ViewStories";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Community from "@/pages/Community";
-
+import UserProfile from "./pages/UserProfilePage";
 function App() {
   return (
     <Routes>
@@ -47,7 +47,7 @@ function App() {
               <Route path="/post-story" element={<PostStory />} />
               <Route path="/view-stories" element={<ViewStories />} />
               <Route path="/chatbot" element={<CB />} />
-
+              <Route path="/user-profile" element={<UserProfile />} />
             </Routes>
             <Footer />
           </div>
