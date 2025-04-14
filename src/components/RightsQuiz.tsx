@@ -173,33 +173,44 @@ export default function RightsQuiz() {
   const progress = ((currentQuestion) / questions.length) * 100; // Corrected to start from 0%
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-  <div className="bg-white shadow-2xl border-2 border-gray-300 rounded-xl p-8 mb-8">
-        <h2 className="text-3xl font-semibold mb-6 text-center text-red-500">Question {currentQuestion + 1}</h2>
+    <div className="max-w-7xl mx-auto px-6 py-12 animate__animated animate__fadeIn">
+      <div className="bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-2 border-gray-200 rounded-3xl p-12 mb-8 backdrop-blur-sm relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.15)] transform hover:scale-[1.01]">
+        
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-gray-200/20 to-gray-300/20 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-gray-100/30 to-gray-200/30 rounded-full blur-2xl -z-10"></div>
+
+        <h2 className="text-4xl font-bold text-center text-red-600 mb-8 animate__animated animate__slideInDown">
+          Question {currentQuestion + 1}
+        </h2>
 
         {/* Progress Bar */}
-        <div className="mb-4">
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
+        <div className="mb-8 animate__animated animate__fadeIn">
+          <div className="w-full bg-gray-100 rounded-full h-3 p-0.5">
             <div
-              className="bg-red-500 h-2.5 rounded-full"
+              className="bg-red-500 h-2 rounded-full transition-all duration-700 ease-in-out"
               style={{ width: `${progress}%` }}
-            ></div>
+            >
+              <div className="animate-pulse-gradient"></div>
+            </div>
           </div>
-          <p className="text-center text-sm text-gray-500">{progress.toFixed(0)}% completed</p>
+          <p className="text-center mt-2 text-sm font-medium text-red-600">
+            {progress.toFixed(0)}% completed
+          </p>
         </div>
 
         {!quizFinished ? (
-          <div>
-            <p className="text-lg mb-4 text-center">{questions[currentQuestion].question}</p>
+          <div className="animate__animated animate__fadeIn">
+            <p className="text-xl mb-8 text-center font-medium text-gray-800">{questions[currentQuestion].question}</p>
             <div className="space-y-4">
               {questions[currentQuestion].options.map((option, index) => (
                 <Button
                   key={index}
                   onClick={() => handleAnswerSelection(option)}
-                  className={`w-full p-4 text-lg rounded-lg shadow-md transition-colors duration-300 ${
+                  className={`w-full p-5 text-lg rounded-xl border transition-all duration-300 transform hover:scale-[1.02] ${
                     selectedAnswer === option
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-100 hover:bg-gray-200 text-black"
+                      ? "bg-red-500 text-white border-transparent shadow-lg"
+                      : "bg-white hover:bg-gray-50 text-gray-800 border-gray-200"
                   }`}
                 >
                   {option}
@@ -208,45 +219,51 @@ export default function RightsQuiz() {
             </div>
 
             {/* Timer Display */}
-            <p className="text-center mt-4 text-lg font-semibold">
-              Time Left: {timer} seconds
-            </p>
+            <div className="mt-6 flex justify-center">
+              <div className="bg-gray-50 px-6 py-3 rounded-full shadow-inner">
+                <p className="text-lg font-semibold text-red-600">
+                  ⏱️ {timer} seconds remaining
+                </p>
+              </div>
+            </div>
 
             {selectedAnswer && (
-              <div className="mt-4 bg-gray-100 p-4 rounded-lg shadow-md">
-                <p className="font-semibold text-red-500">{feedback}</p>
-                <p className="font-semibold text-red-500">Correct Answer: {questions[currentQuestion].correctAnswer}</p>
-                <p>{questions[currentQuestion].description}</p>
+              <div className="mt-6 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transform transition-all duration-300 hover:shadow-xl animate__animated animate__fadeIn">
+                <p className="font-bold text-xl text-red-600 mb-2">{feedback}</p>
+                <p className="font-medium text-gray-800 mb-2">Correct Answer: {questions[currentQuestion].correctAnswer}</p>
+                <p className="text-gray-600">{questions[currentQuestion].description}</p>
               </div>
             )}
             
-            <div className="text-center mt-6">
+            <div className="text-center mt-8">
               <Button
                 onClick={handleNextQuestion}
-                className="px-6 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-400 transition-colors duration-300"
+                className="px-8 py-3 text-white bg-red-500 hover:bg-red-600 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                Next Question
+                Next Question →
               </Button>
             </div>
           </div>
         ) : (
-          <div className="text-center">
-            <h2 className="text-3xl font-semibold mb-6 text-red-500">Quiz Finished!</h2>
-            <p className="text-lg mb-4">
-              You answered {score} out of {questions.length} questions correctly!
+          <div className="text-center animate__animated animate__fadeIn">
+            <h2 className="text-4xl font-bold mb-6 text-red-600">
+              Quiz Completed! 🎉
+            </h2>
+            <p className="text-xl mb-8 text-gray-800">
+              You scored <span className="font-bold text-red-500">{score}</span> out of <span className="font-bold text-red-500">{questions.length}</span>
             </p>
             <div className="space-x-4">
               <Button
                 onClick={handleRestartQuiz}
-                className="px-6 py-2 text-white bg-gray-500 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300"
+                className="px-8 py-3 text-white bg-gray-600 hover:bg-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                Restart Quiz
+                Try Again
               </Button>
               <Link
                 to="/interactive-learning"
-                className="inline-block px-6 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-400 transition-colors duration-300"
+                className="inline-block px-8 py-3 text-white bg-red-500 hover:bg-red-600 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                Go to Interactive Learning
+                Back to Learning
               </Link>
             </div>
           </div>
