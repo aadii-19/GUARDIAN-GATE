@@ -290,3 +290,22 @@
     transform: scale(1);
   }
 }
+/* Add this to your tailwind or your own CSS file for some basic styling */
+.mood-tracker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+video {
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.emotion-display {
+  margin-top: 16px;
+  font-size: 1.2rem;
+  color: #333;
+}
