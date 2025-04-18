@@ -54,6 +54,7 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.3.0",
+    "face-api.js": "^0.22.2",
     "framer-motion": "^12.4.7",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.446.0",
