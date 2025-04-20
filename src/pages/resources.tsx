@@ -1,67 +1,250 @@
-import { useEffect } from "react";
+// pages/ResourcesPage.tsx
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BookOpen, PhoneCall, Globe, Heart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Bookmark, BookmarkX, Search } from "lucide-react";
+import { motion } from "framer-motion";
 
-const resources = [
-  {
-    title: "Emergency Helplines",
-    description: "Find immediate support through 24/7 helplines for women and children in distress.",
-    icon: <PhoneCall size={24} />, 
-    link: "#",
-  },
-  {
-    title: "Mental Health Support",
-    description: "Access counseling services, self-care tips, and mental health hotlines.",
-    icon: <Heart size={24} />, 
-    link: "#",
-  },
-  {
-    title: "Legal Assistance",
-    description: "Know your rights! Get legal aid, protection orders, and advocacy support.",
-    icon: <BookOpen size={24} />, 
-    link: "#",
-  },
-  {
-    title: "Online Safety & Awareness",
-    description: "Learn about digital safety, cyberbullying prevention, and self-defense strategies.",
-    icon: <Globe size={24} />, 
-    link: "#",
-  },
-];
+interface Volume {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors?: string[];
+    description?: string;
+    categories?: string[];
+    infoLink: string;
+  };
+  accessInfo: {
+    pdf: { isAvailable: boolean; acsTokenLink?: string };
+    epub: { isAvailable: boolean; epubLink?: string };
+  };
+}
 
 export default function ResourcesPage() {
-  // Animation for fade-in effect
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<Volume[]>([]);
+  const [filtered, setFiltered] = useState<Volume[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [categories, setCategories] = useState<string[]>(["All"]);
+  const [activeCat, setActiveCat] = useState("All");
+  const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
+
   useEffect(() => {
-    const elements = document.querySelectorAll('.fade-in');
-    elements.forEach((el) => {
-      el.classList.add('opacity-0');
-      setTimeout(() => {
-        el.classList.remove('opacity-0');
-        el.classList.add('transition-opacity', 'duration-1000', 'opacity-100');
-      }, 100);
-    });
+    const saved = localStorage.getItem("bookmarks");
+    if (saved) setBookmarks(new Set(JSON.parse(saved)));
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("bookmarks", JSON.stringify(Array.from(bookmarks)));
+  }, [bookmarks]);
+
+  useEffect(() => {
+    if (activeCat === "All") setFiltered(results);
+    else
+      setFiltered(
+        results.filter((v) =>
+          v.volumeInfo.categories?.includes(activeCat)
+        )
+      );
+  }, [results, activeCat]);
+
+  const fetchDocuments = async (loadMore = false) => {
+    if (!query.trim()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const idx = loadMore ? startIndex : 0;
+      const res = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+          query
+        )}&filter=free-ebooks&startIndex=${idx}&maxResults=10`
+      );
+      if (!res.ok) throw new Error("Network Error");
+      const data = await res.json();
+      const items: Volume[] = data.items || [];
+      const newResults = loadMore ? [...results, ...items] : items;
+      setResults(newResults);
+      setStartIndex(idx + 10);
+
+      const catSet = new Set<string>();
+      newResults.forEach((v) =>
+        v.volumeInfo.categories?.forEach((c) => catSet.add(c))
+      );
+      setCategories(["All", ...Array.from(catSet)]);
+      setActiveCat("All");
+    } catch (e) {
+      console.error(e);
+      setError("Unable to fetch documents. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setQuery("");
+    setResults([]);
+    setFiltered([]);
+    setCategories(["All"]);
+    setActiveCat("All");
+    setStartIndex(0);
+    setError(null);
+  };
+
+  const toggleBookmark = (id: string) => {
+    setBookmarks((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const SKELETONS = Array.from({ length: 6 }).map((_, i) => (
+    <div key={i} className="h-72 bg-gray-200 animate-pulse rounded-2xl" />
+  ));
+
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-semibold text-center text-gray-900 mb-12 fade-in">Resources & Support</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {resources.map((resource, index) => (
-          <Card 
-            key={index} 
-            className="fade-in p-6 flex flex-col items-center text-center bg-white rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out"
-          >
-            <div className="mb-4 text-indigo-600">{resource.icon}</div>
-            <CardContent>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">{resource.title}</h2>
-              <p className="text-lg text-gray-700 mb-4">{resource.description}</p>
-              <Button variant="outline" className="transition-all duration-300 hover:bg-indigo-600 hover:text-white">
-                <a href={resource.link}>Learn More</a>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+    <div className="px-4 py-10 md:px-6 max-w-6xl mx-auto">
+      <div className="rounded-3xl shadow-[0_0_30px_rgba(200,0,0,0.4)] border border-gray-300 bg-gradient-to-br from-white/60 to-gray-100/70 backdrop-blur-md p-6 md:p-10 space-y-8">
+        {/* Header */}
+        <header className="text-center space-y-2">
+          <h1 className="text-4xl font-extrabold text-gray-900">
+            Find & Download Documents
+          </h1>
+          <p className="text-gray-600">Search free eBooks & papers.</p>
+        </header>
+
+        {/* Search */}
+        <div className="flex flex-col md:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Type document topic..."
+              className="pl-10"
+            />
+          </div>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => fetchDocuments(false)}
+              disabled={loading}
+              className="bg-red-600 hover:bg-red-500 text-white"
+            >
+              {loading ? "Searching…" : "Fetch"}
+            </Button>
+            <Button onClick={clearSearch} disabled={loading} variant="outline">
+              Clear
+            </Button>
+          </div>
+        </div>
+        {error && <p className="text-red-600">{error}</p>}
+
+        {/* Category Filters */}
+        {categories.length > 1 && (
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <Badge
+                key={cat}
+                onClick={() => setActiveCat(cat)}
+                className={`cursor-pointer px-3 py-1 rounded-full font-medium ${
+                  activeCat === cat
+                    ? "bg-red-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                {cat}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {/* Results Grid */}
+        {loading && results.length === 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{SKELETONS}</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filtered.map((vol) => {
+              const { id, volumeInfo, accessInfo } = vol;
+              const pdfLink = accessInfo.pdf.isAvailable
+                ? accessInfo.pdf.acsTokenLink
+                : accessInfo.epub.isAvailable
+                ? accessInfo.epub.epubLink
+                : null;
+
+              return (
+                <motion.div
+                  key={id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="flex flex-col h-72 justify-between bg-white bg-opacity-60 backdrop-blur-md rounded-2xl border border-gray-300 shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden">
+                    <CardContent className="flex flex-col flex-grow p-6 space-y-4">
+                      <div className="flex justify-between items-start">
+                        {volumeInfo.categories && (
+                          <Badge className="text-xs bg-red-600 text-white">
+                            {volumeInfo.categories[0]}
+                          </Badge>
+                        )}
+                        <button
+                          onClick={() => toggleBookmark(id)}
+                          aria-label="Bookmark"
+                        >
+                          {bookmarks.has(id) ? (
+                            <Bookmark size={20} className="text-red-500" />
+                          ) : (
+                            <BookmarkX size={20} className="text-gray-300" />
+                          )}
+                        </button>
+                      </div>
+                      <div className="flex-grow flex flex-col space-y-1">
+                        <h2 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                          {volumeInfo.title}
+                        </h2>
+                        {volumeInfo.authors && (
+                          <p className="text-gray-700 text-sm">
+                            by {volumeInfo.authors.join(", ")}
+                          </p>
+                        )}
+                        {volumeInfo.description && (
+                          <p className="text-gray-600 text-sm line-clamp-2">
+                            {volumeInfo.description}
+                          </p>
+                        )}
+                      </div>
+                      <a
+                        href={pdfLink || volumeInfo.infoLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-auto"
+                      >
+                        <Button className="w-full bg-red-600 hover:bg-red-500 text-white">
+                          {pdfLink ? "Download PDF" : "View Details"}
+                        </Button>
+                      </a>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Load More */}
+        {!loading && filtered.length > 0 && (
+          <div className="text-center">
+            <Button
+              onClick={() => fetchDocuments(true)}
+              className="bg-red-600 hover:bg-red-500 text-white"
+            >
+              Load More
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
