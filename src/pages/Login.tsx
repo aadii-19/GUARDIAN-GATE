@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/supabaseClient';
+import { Typewriter } from 'react-simple-typewriter';
 import ModalWindow from '@/components/ModalWindow';
 import DiscreetCamera from '@/components/DiscreetCamera';
+import { Button } from "@/components/ui/button";
 import FakeUIScreen from '@/components/FakeUIScreen';  // Adjust the path as needed
 import homebg from "@/images/homebg.jpg";
+import { useSpring, animated } from "@react-spring/web";
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -16,7 +19,25 @@ export default function LoginPage() {
   const [showCamera, setShowCamera] = useState(false);
   const [showFakeUI, setShowFakeUI] = useState(false);
   const navigate = useNavigate();
-  
+  const headingSpring = useSpring({
+    from: { opacity: 0, transform: 'translateY(-40px)' },
+    to: { opacity: 1, transform: 'translateY(0px)' },
+    config: { duration: 1000 },
+  });
+
+  const textSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    delay: 300,
+    config: { duration: 1200 },
+  });
+
+  const buttonSpring = useSpring({
+    from: { opacity: 0, transform: 'translateY(50px)' },
+    to: { opacity: 1, transform: 'translateY(0px)' },
+    delay: 600,
+    config: { duration: 1200 },
+  });
   useEffect(() => {
     setShowEmergency(false);
     setLocation(null);
@@ -229,14 +250,31 @@ export default function LoginPage() {
 {showEmergency && (
   <ModalWindow onClose={() => setShowEmergency(false)}>
     <div className="text-black text-center space-y-6 px-4 py-6 sm:px-6 sm:py-8">
-      <h2 className="text-3xl sm:text-4xl font-bold text-red-600 drop-shadow-md">
-        🚨 Emergency Mode Activated
-      </h2>
-      <p className="text-lg sm:text-xl text-gray-800">
-        Share this link to allow others to track your <span className="font-semibold text-red-500">live location</span>.
+      {/* Heading Box */}
+      <div className="bg-white/30 backdrop-blur-md p-6 rounded-xl border-2 border-gray-300 shadow-xl inline-block">
+        <animated.h2
+          style={headingSpring}
+          className="text-3xl sm:text-4xl font-bold text-red-600 drop-shadow-xl"
+        >
+          🚨 Emergency Mode Activated
+        </animated.h2>
+      </div>
+
+      {/* Typewriter Text for Location Sharing */}
+      <p className="text-lg sm:text-xl text-gray-800 mt-6">
+        <Typewriter
+          words={['Share this link to allow others to track your live location.']}
+          loop={1}
+          cursor
+          cursorStyle="|"
+          typeSpeed={50}
+          deleteSpeed={40}
+          delaySpeed={1500}
+        />
       </p>
 
-      <div className="bg-white/20 backdrop-blur-md p-6 rounded-2xl border border-white/30 shadow-md space-y-4">
+      {/* Box for location */}
+      <div className="bg-white/30 backdrop-blur-md p-6 rounded-2xl border-2 border-gray-300 shadow-xl space-y-4">
         <p className="text-base sm:text-lg font-medium text-gray-900">📍 Your current location:</p>
 
         {location ? (
@@ -245,24 +283,26 @@ export default function LoginPage() {
               href={`https://maps.google.com/?q=${location.lat},${location.lng}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="block bg-black/40 text-white px-4 py-3 rounded-lg text-sm sm:text-base break-all underline hover:text-red-300 transition-all"
+              className="block bg-black/40 text-white px-4 py-3 rounded-lg text-sm sm:text-base break-all underline hover:text-red-300 transition-all duration-300"
             >
               https://maps.google.com/?q={location.lat},{location.lng}
             </a>
 
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-6">
-              <button
+              <animated.button
+                style={buttonSpring}
                 onClick={handleShareLocation}
-                className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 text-base sm:text-lg rounded-xl font-semibold shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,0,0,0.7)]"
+                className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 text-base sm:text-lg rounded-xl font-semibold shadow-2xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] border-2 border-red-600"
               >
                 📤 Share Location
-              </button>
-              <button
+              </animated.button>
+              <animated.button
+                style={buttonSpring}
                 onClick={() => setShowEmergency(false)}
-                className="bg-white hover:bg-gray-100 text-red-600 px-5 py-3 text-base sm:text-lg rounded-xl font-semibold shadow-md transition-all duration-300 border border-red-300"
+                className="bg-white hover:bg-gray-100 text-red-600 px-5 py-3 text-base sm:text-lg rounded-xl font-semibold shadow-md transition-all duration-300 border-2 border-red-600"
               >
                 Back to Login
-              </button>
+              </animated.button>
             </div>
           </>
         ) : (
@@ -270,28 +310,51 @@ export default function LoginPage() {
         )}
       </div>
 
-      {/* 🔥 Add Camera Button Here */}
+      {/* 🎥 Camera Button */}
       {showCamera && <DiscreetCamera onClose={() => setShowCamera(false)} />}
-      <button
+      <animated.button
+        style={buttonSpring}
         onClick={() => setShowCamera(true)}
-        className="w-full sm:w-auto bg-black/80 hover:bg-black text-white font-semibold py-3 px-6 rounded-xl text-center shadow-md transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,0,0,0.4)]"
+        className="w-full sm:w-auto bg-black/80 hover:bg-black text-white font-semibold py-3 px-6 rounded-xl text-center shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,0,0,0.6)] border-2 border-black"
       >
         🎥 Capture Evidence Silently
-      </button>
+      </animated.button>
 
-      {/* Emergency Services */}
-      <div className="space-y-6">
+      {/* Emergency Services Section with All Buttons in One Box */}
+      <div className="border-2 border-red-600 rounded-xl p-6 shadow-lg space-y-4">
         <p className="text-lg sm:text-xl font-semibold text-gray-800 text-center">Choose your emergency service:</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <a href="tel:100" className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-5 rounded-xl text-center shadow-md transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.6)]">🚓 Police</a>
-          <a href="tel:102" className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-5 rounded-xl text-center shadow-md transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.6)]">🚑 Ambulance</a>
-          <a href="tel:101" className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-5 rounded-xl text-center shadow-md transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.6)]">🔥 Fire</a>
-          <a href="tel:1091" className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-5 rounded-xl text-center shadow-md transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.6)]">☎️ Women Helpline</a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <animated.a
+            style={buttonSpring}
+            href="tel:100"
+            className="block bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-xl text-center transition-all duration-300"
+          >
+            🚓 Police
+          </animated.a>
+          <animated.a
+            style={buttonSpring}
+            href="tel:102"
+            className="block bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-xl text-center transition-all duration-300"
+          >
+            🚑 Ambulance
+          </animated.a>
+          <animated.a
+            style={buttonSpring}
+            href="tel:101"
+            className="block bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-xl text-center transition-all duration-300"
+          >
+            🔥 Fire
+          </animated.a>
+          <animated.a
+            style={buttonSpring}
+            href="tel:1091"
+            className="block bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-xl text-center transition-all duration-300"
+          >
+            ☎️ Women Helpline
+          </animated.a>
         </div>
       </div>
-      
-      
     </div>
   </ModalWindow>
 )}
