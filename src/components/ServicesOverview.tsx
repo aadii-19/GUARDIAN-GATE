@@ -25,7 +25,7 @@ export function ServicesOverview() {
         </div>
 
         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4">
-          {[
+          {[ 
             {
               Icon: Scale,
               title: "Legal Advisory",
@@ -36,13 +36,13 @@ export function ServicesOverview() {
               Icon: GamepadIcon,
               title: "Interactive Learning",
               desc: "Learn about your rights through engaging activities.",
-              link: "/services",
+              link: "/interactive-learning",
             },
             {
               Icon: Users2,
               title: "Community Support",
               desc: "Connect with others and share experiences safely.",
-              link: "/services",
+              link: "/community", // Changed link to /community
             },
             {
               Icon: Heart,

@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import image1 from "@/images/1.jpeg";
 import { Typewriter } from "react-simple-typewriter";
 import { useSpring, animated } from "@react-spring/web";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 export function HeroSection() {
   // Animation configs
@@ -32,7 +33,6 @@ export function HeroSection() {
     delay: 400,
     config: { duration: 1200 },
   });
-  
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -75,24 +75,28 @@ export function HeroSection() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <animated.div style={leftBtnSpring}>
-            <Button
-              size="lg"
-              variant="destructive"
-              className="px-8 py-5 text-lg font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
-            >
-              Get Immediate Help
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <Link to="/emergency">
+              <Button
+                size="lg"
+                variant="destructive"
+                className="px-8 py-5 text-lg font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
+              >
+                Get Immediate Help
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </animated.div>
 
           <animated.div style={rightBtnSpring}>
-            <Button
-              size="lg"
-              variant="ghost"
-              className="px-8 py-5 text-lg font-medium backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/20 text-white shadow-lg hover:scale-105 transition-transform duration-300"
-            >
-              Explore Resources
-            </Button>
+            <Link to="/resources">
+              <Button
+                size="lg"
+                variant="ghost"
+                className="px-8 py-5 text-lg font-medium backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/20 text-white shadow-lg hover:scale-105 transition-transform duration-300"
+              >
+                Explore Resources
+              </Button>
+            </Link>
           </animated.div>
         </div>
       </div>
