@@ -102,102 +102,114 @@ export default function MatchTheFollowing() {
     };
   
     return (
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-semibold mb-6 text-center text-red-500">
-          Match the Following: {selectedSet.name}
-        </h2>
-  
-        {/* Switch Set Buttons */}
-        <div className="flex justify-center space-x-4 mb-6">
-          {sets.map((set, index) => (
-            <button
-              key={index}
-              onClick={() => switchSet(index)}
-              className={`px-4 py-2 rounded-lg shadow-md text-white transition-all ${
-                selectedSetIndex === index ? "bg-red-500" : "bg-gray-400 hover:bg-gray-500"
-              }`}
-            >
-              {set.name}
-            </button>
-          ))}
-        </div>
-  
-        <div className="flex flex-col md:flex-row space-x-0 md:space-x-8">
-          {/* Scenarios Section */}
-          <div className="flex-1">
-            <h3 className="font-bold text-xl mb-4 text-center">Scenarios</h3>
-            <ul className="space-y-4">
-              {selectedSet.scenarios.map((scenario, index) => (
-                <li key={index} className="bg-white p-4 border rounded-lg shadow-md">
-                  <p className="font-medium">{scenario}</p>
-                  <select
-                    value={matches[index] || ""}
-                    onChange={(e) => handleMatch(index, e.target.value)}
-                    className="mt-2 p-2 border rounded-lg w-full"
-                  >
-                    <option value="">Select an action</option>
-                    {selectedSet.actions.map((action, idx) => (
-                      <option key={idx} value={action}>{action}</option>
-                    ))}
-                  </select>
-                </li>
-              ))}
-            </ul>
+      <div className="max-w-7xl mx-auto px-6 py-12 animate__animated animate__fadeIn">
+        <div className="bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-2 border-gray-200 rounded-3xl p-12 mb-8 backdrop-blur-sm relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.15)] transform hover:scale-[1.01]">
+          
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-gray-200/20 to-gray-300/20 rounded-full blur-3xl -z-10"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-gray-100/30 to-gray-200/30 rounded-full blur-2xl -z-10"></div>
+
+          <h2 className="text-4xl font-bold mb-8 text-center text-red-600 animate__animated animate__slideInDown">
+            Match the Following: {selectedSet.name}
+          </h2>
+
+          {/* Switch Set Buttons */}
+          <div className="flex justify-center space-x-4 mb-8 animate__animated animate__fadeIn">
+            {sets.map((set, index) => (
+              <button
+                key={index}
+                onClick={() => switchSet(index)}
+                className={`px-6 py-3 rounded-xl shadow-lg text-white transition-all duration-300 transform hover:scale-105 ${
+                  selectedSetIndex === index ? "bg-red-500 hover:bg-red-600" : "bg-gray-500 hover:bg-gray-600"
+                }`}
+              >
+                {set.name}
+              </button>
+            ))}
           </div>
-  
-          {/* Responses Section with Boxed UI */}
-          <div className="flex-1">
-            <h3 className="font-bold text-xl mb-4 text-center">Responses</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {selectedSet.actions.map((action, index) => (
-                <div key={index} className="bg-gray-100 p-4 border rounded-lg shadow-md text-center font-medium">
-                  {action}
-                </div>
-              ))}
+
+          <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8">
+            {/* Scenarios Section */}
+            <div className="flex-1 animate__animated animate__fadeInLeft bg-white rounded-2xl shadow-xl p-8">
+              <h3 className="font-bold text-2xl mb-6 text-center text-gray-800">Scenarios</h3>
+              <ul className="space-y-4">
+                {selectedSet.scenarios.map((scenario, index) => (
+                  <li key={index} className="bg-gray-50 p-6 rounded-2xl shadow-lg border border-gray-200 transform transition-all duration-300 hover:shadow-xl">
+                    <p className="font-medium text-lg text-gray-800">{scenario}</p>
+                    <select
+                      value={matches[index] || ""}
+                      onChange={(e) => handleMatch(index, e.target.value)}
+                      className="mt-4 p-3 border-2 border-gray-200 rounded-xl w-full focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
+                    >
+                      <option value="">Select an action</option>
+                      {selectedSet.actions.map((action, idx) => (
+                        <option key={idx} value={action}>{action}</option>
+                      ))}
+                    </select>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Responses Section */}
+            <div className="flex-1 animate__animated animate__fadeInRight bg-white rounded-2xl shadow-xl p-8">
+              <h3 className="font-bold text-2xl mb-6 text-center text-gray-800">Responses</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedSet.actions.map((action, index) => (
+                  <div key={index} className="bg-gray-50 p-6 rounded-2xl shadow-lg border border-gray-200 text-center font-medium text-gray-800 transform transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                    {action}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-  
-        {/* Check Answers Button */}
-        <div className="text-center mt-6">
-          <button
-            onClick={checkAnswers}
-            className="px-6 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-400 transition-all"
-          >
-            Check Answers
-          </button>
-        </div>
-  
-        {/* Results Section */}
-        {showResults && (
-          <div className="mt-6 p-6 bg-gray-50 rounded-lg shadow-lg">
-            <h3 className="text-lg font-semibold text-red-500 mb-4 text-center">Results</h3>
-            <ul className="space-y-4">
-              {selectedSet.scenarios.map((scenario, index) => (
-                <li key={index} className="p-4 border rounded-lg shadow-md bg-white">
-                  <p className="font-medium">{scenario}</p>
-                  <p className={`mt-2 p-2 rounded-lg ${
-                    matches[index] === selectedSet.correctAnswers[index] ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"
-                  }`}>
-                    Your Answer: {matches[index] || "Not answered"}
-                  </p>
-                  <p className="text-gray-700 font-semibold">
-                    Correct Answer: {selectedSet.correctAnswers[index]}
-                  </p>
-                </li>
-              ))}
-            </ul>
+
+          {/* Check Answers Button */}
+          <div className="text-center mt-10">
+            <button
+              onClick={checkAnswers}
+              className="px-8 py-4 text-lg text-white bg-red-500 rounded-xl shadow-lg hover:bg-red-600 transition-all duration-300 transform hover:scale-105"
+            >
+              Check Answers
+            </button>
           </div>
-        )}
-  
-        {/* Back Button */}
-        <div className="text-center mt-6">
-          <button
-            onClick={() => navigate("/interactive-learning")}
-            className="px-6 py-2 text-white bg-gray-500 rounded-lg shadow-md hover:bg-gray-600 transition-all"
-          >
-            Return to Interactive Learning
-          </button>
+
+          {/* Results Section */}
+          {showResults && (
+            <div className="mt-10 animate__animated animate__fadeIn">
+              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                <h3 className="text-2xl font-bold text-red-600 mb-6 text-center">Results</h3>
+                <ul className="space-y-6">
+                  {selectedSet.scenarios.map((scenario, index) => (
+                    <li key={index} className="p-6 rounded-xl shadow-md bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 transform transition-all duration-300 hover:shadow-xl">
+                      <p className="font-medium text-lg text-gray-800 mb-3">{scenario}</p>
+                      <p className={`p-4 rounded-xl transition-all duration-300 ${
+                        matches[index] === selectedSet.correctAnswers[index] 
+                          ? "bg-green-100 text-green-800 border border-green-200" 
+                          : "bg-red-100 text-red-800 border border-red-200"
+                      }`}>
+                        Your Answer: {matches[index] || "Not answered"}
+                      </p>
+                      <p className="mt-3 font-semibold text-gray-700">
+                        Correct Answer: {selectedSet.correctAnswers[index]}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Back Button */}
+          <div className="text-center mt-10">
+            <button
+              onClick={() => navigate("/interactive-learning")}
+              className="px-8 py-4 text-lg text-white bg-gray-600 rounded-xl shadow-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105"
+            >
+              Return to Interactive Learning
+            </button>
+          </div>
+
         </div>
       </div>
   );

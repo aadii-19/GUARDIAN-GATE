@@ -45,3 +45,4 @@ coverage
 # Lock files (if using npm only)
 yarn.lock
 pnpm-lock.yaml
+.qodo

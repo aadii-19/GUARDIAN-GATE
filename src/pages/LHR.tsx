@@ -3,14 +3,15 @@ import { Button } from "@/components/ui/button";
 import ExpandableCard from "@/components/ExpandableCards";
 import { motion } from "framer-motion";
 import ModalWindow from "@/components/ModalWindow"; 
-
+import chatbot from "@/components/ChatBot";
+import { useNavigate } from "react-router-dom";
 export default function LegalHelp() {
   const [activeSection, setActiveSection] = useState<"women" | "children">("women");
   const [isVisible, setIsVisible] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string>("Domestic Violence & Protection Laws");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -67,6 +68,7 @@ export default function LegalHelp() {
     >
       Children's Rights & Resources
     </Button>
+    
   </div>
 
 
@@ -1245,6 +1247,7 @@ export default function LegalHelp() {
                        <ExpandableCard
   title="📞 Emergency Helplines & Support Services"
   description="Key contacts for child safety, protection, and legal aid."
+  
   details={
     <div className="p-4 bg-white rounded-lg shadow-md border border-red-500">
       <p className="text-lg font-medium text-gray-800">
@@ -1313,6 +1316,7 @@ export default function LegalHelp() {
             </div>
           ))}
         </div>
+        
       </div>
 
       <h3 className="mt-6 text-xl font-semibold text-red-700">💡 Why Emergency Helplines Matter</h3>
@@ -1329,7 +1333,9 @@ export default function LegalHelp() {
       <p className="text-gray-700">
         Spread awareness about these helplines, report cases of child abuse, and support child welfare initiatives in your community.
       </p>
+      
     </div>
+    
   }
 />
                       </>
@@ -1352,7 +1358,25 @@ export default function LegalHelp() {
           {modalContent}
         </ModalWindow>
       )}
-     
+     {!isModalOpen && (
+  <div className="relative z-10 bg-gray-100 p-6 rounded-2xl border-4 border-red-400 shadow-md w-full max-w-5xl mx-auto  transition-all duration-500">
+  <p className="text-lg text-gray-800 text-center leading-relaxed mb-4 font-medium">
+    Looking for more personalized support or detailed answers?
+    Our intelligent chatbot is here 24/7 to assist you with mental wellness guidance, tips, and resources tailored just for you.
+  </p>
+
+  <div className="flex justify-center mt-4">
+    <button
+      onClick={() => navigate("/chatbot")}
+      className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md border-2 border-red-600 hover:border-red-700 transition-all duration-300 transform hover:scale-105"
+    >
+      Chat with our Wellness Bot
+    </button>
+  </div>
+</div>
+
+)}
+
     </div>
   );
 }

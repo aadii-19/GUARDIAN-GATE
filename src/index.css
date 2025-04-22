@@ -67,4 +67,245 @@
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
+@keyframes premium-phone-shake {
+  0%, 10%, 100% {
+    transform: rotate(0deg);
+  }
+  12% {
+    transform: rotate(5deg);
+  }
+  14% {
+    transform: rotate(-5deg);
+  }
+  16% {
+    transform: rotate(4deg);
+  }
+  18% {
+    transform: rotate(-4deg);
+  }
+  20% {
+    transform: rotate(2deg);
+  }
+  22% {
+    transform: rotate(-2deg);
+  }
+  24% {
+    transform: rotate(0deg);
+  }
+}
 
+.phone-shake {
+  animation: premium-phone-shake 3s infinite ease-in-out;
+  transform-origin: center;
+  display: inline-block;
+}
+.cssbuttons-io-button {
+  background: #ef4444; /* red-500 */
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 1.2em;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 0.9em;
+  border: 1.5px solid rgba(255, 255, 255, 0.4); /* Light white border */
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #f87171;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  padding-right: 3.3em;
+  cursor: pointer;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.cssbuttons-io-button .icon {
+  background: white;
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em rgba(239, 68, 68, 0.4);
+  right: 0.3em;
+  transition: all 0.3s;
+}
+
+.cssbuttons-io-button:hover .icon {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button .icon svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: #ef4444;
+}
+
+.cssbuttons-io-button:hover .icon svg {
+  transform: translateX(0.1em);
+}
+
+.cssbuttons-io-button:active .icon {
+  transform: scale(0.95);
+}
+.bin-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: rgb(255, 95, 95);
+  cursor: pointer;
+  border: 2px solid rgb(255, 201, 201);
+  transition-duration: 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.bin-bottom {
+  width: 15px;
+  z-index: 2;
+}
+.bin-top {
+  width: 17px;
+  transform-origin: right;
+  transition-duration: 0.3s;
+  z-index: 2;
+}
+.bin-button:hover .bin-top {
+  transform: rotate(45deg);
+}
+.bin-button:hover {
+  background-color: rgb(255, 0, 0);
+}
+.bin-button:active {
+  transform: scale(0.9);
+}
+.garbage {
+  position: absolute;
+  width: 14px;
+  height: auto;
+  z-index: 1;
+  opacity: 0;
+  transition: all 0.3s;
+}
+.bin-button:hover .garbage {
+  animation: throw 0.4s linear;
+}
+@keyframes throw {
+  from {
+    transform: translate(-400%, -700%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out both;
+}
+/* ViewStories.css */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-like {
+  animation: pop 0.4s ease;
+}
+.story-card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  perspective: 1000px;
+}
+
+.story-card:hover {
+  transform: rotateX(3deg) rotateY(-3deg) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.like-burst {
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.emoji-burst {
+  font-size: 1rem;
+  opacity: 0;
+  animation: floatBurst 0.9s ease-out forwards;
+  position: absolute;
+}
+
+@keyframes floatBurst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.5);
+  }
+}
+
+.animate-like-glow {
+  animation: glow 0.8s ease-out;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #f00;
+    transform: scale(1.3);
+  }
+  100% {
+    text-shadow: none;
+    transform: scale(1);
+  }
+}
+/* Add this to your tailwind or your own CSS file for some basic styling */
+.mood-tracker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+video {
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.emotion-display {
+  margin-top: 16px;
+  font-size: 1.2rem;
+  color: #333;
+}

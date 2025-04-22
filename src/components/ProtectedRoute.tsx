@@ -1,11 +1,25 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { supabase } from '@/supabaseClient'
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+interface ProtectedRouteProps {
+  children: JSX.Element
+}
 
-  if (!user) return <Navigate to="/login" />;
-  return <>{children}</>;
-};
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
 
-export default ProtectedRoute;
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession()
+      setIsAuthenticated(!!data.session)
+    }
+    getSession()
+  }, [])
+
+  if (isAuthenticated === null) {
+    return <div className="text-center mt-10">Checking authentication...</div>
+  }
+
+  return isAuthenticated ? children : <Navigate to="/login" />
+}

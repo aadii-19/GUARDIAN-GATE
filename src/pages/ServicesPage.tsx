@@ -68,7 +68,7 @@ useEffect(() => {
           <Card className="p-8">
             <h2 className="text-3xl font-semibold mb-6">Community Support</h2>
             <p className="text-lg">Join a safe space to share experiences and support each other.</p>
-            <Link to="/community-support" className="inline-block mt-6 px-6 py-2 text-white bg-red-500 rounded hover:bg-red-400">
+            <Link to="/community" className="inline-block mt-6 px-6 py-2 text-white bg-red-500 rounded hover:bg-red-400">
               Join the Community & Share Stories
             </Link>
           </Card>

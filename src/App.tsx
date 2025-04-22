@@ -1,9 +1,9 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { HomePage } from "@/pages/HomePage";
 import { ServicesPage } from "@/pages/ServicesPage";
-import { EmergencyPage } from "@/pages/EmergencyPage"; // ✅
+import { EmergencyPage } from "@/pages/EmergencyPage";
 import ResourcesPage from "@/pages/resources";
 import AboutPage from "@/pages/about";
 import LHR from "@/pages/LHR";
@@ -13,46 +13,47 @@ import RQ from "@/components/RightsQuiz";
 import SS from "@/components/SafetySimulator";
 import MTF from "@/components/MatchTheFollowing";
 import CB from "@/components/ChatBot";
-import Login from "@/pages/Login";
-import Signup from "@/pages/Signup";
-import { AuthProvider } from "@/context/AuthContext";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import { Toaster } from "sonner"; // ✅ Import this!
-
-
+import LoginPage from "@/pages/Login";
+import PostStory from "@/pages/PostStory";
+import ViewStories from "@/pages/ViewStories";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import Community from "@/pages/Community";
+import UserProfile from "./pages/UserProfilePage";
 function App() {
-  const location = useLocation();
-  const hideFooter = location.pathname === "/login" || location.pathname === "/signup";
-
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-background">
-      <Toaster richColors position="top-center" /> {/* ✅ Add this line */}
-        <Navigation />
+    <Routes>
+      {/* Public Route */}
+      <Route path="/login" element={<LoginPage />} />
 
-        <Routes>
-          {/* ✅ Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/emergency" element={<EmergencyPage />} /> {/* 🔓 Public now */}
-
-          {/* 🔐 Protected Routes */}
-          <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-          <Route path="/services" element={<ProtectedRoute><ServicesPage /></ProtectedRoute>} />
-          <Route path="/resources" element={<ProtectedRoute><ResourcesPage /></ProtectedRoute>} />
-          <Route path="/about" element={<ProtectedRoute><AboutPage /></ProtectedRoute>} />
-          <Route path="/legal-help" element={<ProtectedRoute><LHR /></ProtectedRoute>} />
-          <Route path="/mental-wellbeing" element={<ProtectedRoute><MWB /></ProtectedRoute>} />
-          <Route path="/interactive-learning" element={<ProtectedRoute><IL /></ProtectedRoute>} />
-          <Route path="/game-1" element={<ProtectedRoute><RQ /></ProtectedRoute>} />
-          <Route path="/game-2" element={<ProtectedRoute><SS /></ProtectedRoute>} />
-          <Route path="/game-3" element={<ProtectedRoute><CB /></ProtectedRoute>} />
-          <Route path="/game-4" element={<ProtectedRoute><MTF /></ProtectedRoute>} />
-        </Routes>
-
-        {!hideFooter && <Footer />}
-      </div>
-    </AuthProvider>
+      {/* Everything else is protected */}
+      <Route path="*" element={
+        <ProtectedRoute>
+          <div className="min-h-screen bg-background">
+            <Navigation />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/emergency" element={<EmergencyPage />} />
+              <Route path="/resources" element={<ResourcesPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/legal-help" element={<LHR />} />
+              <Route path="/mental-wellbeing" element={<MWB />} />
+              <Route path="/interactive-learning" element={<IL />} />
+              <Route path="/game-1" element={<RQ />} />
+              <Route path="/game-2" element={<SS />} />
+              <Route path="/game-3" element={<CB />} />
+              <Route path="/game-4" element={<MTF />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/post-story" element={<PostStory />} />
+              <Route path="/view-stories" element={<ViewStories />} />
+              <Route path="/chatbot" element={<CB />} />
+              <Route path="/user-profile" element={<UserProfile />} />
+            </Routes>
+            <Footer />
+          </div>
+        </ProtectedRoute>
+      } />
+    </Routes>
   );
 }
 
